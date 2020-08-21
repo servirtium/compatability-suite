@@ -53,25 +53,25 @@ function defineSpecsFor(apiRoot){
 
     describe( "the pre-requisites", function(){
       specify( "the api root responds to a GET (i.e. the server is up and accessible, CORS headers are set up)", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var getRoot = getRaw(apiRoot);
         return expect( getRoot ).to.be.fulfilled;
       });
 
       specify( "the api root responds to a POST with the todo which was posted to it", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var postRoot = postJson(apiRoot, {title:"a todo"});
         return expect( postRoot ).to.eventually.have.property("title","a todo");
       });
 
       specify( "the api root responds successfully to a DELETE", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var deleteRoot = delete_(apiRoot);
         return expect( deleteRoot ).to.be.fulfilled;
       });
 
       specify( "after a DELETE the api root responds to a GET with a JSON representation of an empty array", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var deleteThenGet = delete_(apiRoot).then( getRoot );
 
         return expect( deleteThenGet ).to.become([]);
@@ -84,7 +84,7 @@ function defineSpecsFor(apiRoot){
       });
 
       it("adds a new todo to the list of todos at the root url", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var getAfterPost = postRoot({title:"walk the dog"}).then(getRoot);
         return getAfterPost.then(function(todosFromGet){
           expect(todosFromGet).to.have.length(1);
@@ -102,7 +102,7 @@ function defineSpecsFor(apiRoot){
       }
 
       it("sets up a new todo as initially not completed", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         return createTodoAndVerifyItLooksValidWith(function(todo){
           expect(todo).to.have.property("completed",false);
           return todo;
@@ -110,14 +110,14 @@ function defineSpecsFor(apiRoot){
       });
 
       it("each new todo has a url", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         return createTodoAndVerifyItLooksValidWith(function(todo){
           expect(todo).to.have.a.property("url").is.a("string");
           return todo;
         });
       });
       it("each new todo has a url, which returns a todo", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var fetchedTodo = postRoot({title:"my todo"})
           .then( function(newTodo){
             return get(newTodo.url);
@@ -133,7 +133,7 @@ function defineSpecsFor(apiRoot){
       });
 
       it("can navigate from a list of todos to an individual todo via urls", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var makeTwoTodos = Q.all( [
           postRoot({title:"todo the first"}),
           postRoot({title:"todo the second"})
@@ -148,7 +148,7 @@ function defineSpecsFor(apiRoot){
       });
 
       it("can change the todo's title by PATCHing to the todo's url", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         return createFreshTodoAndGetItsUrl({title:"initial title"})
           .then( function(urlForNewTodo){
             return patchJson( urlForNewTodo, {title:"bathe the cat"} );
@@ -158,7 +158,7 @@ function defineSpecsFor(apiRoot){
       });
 
       it("can change the todo's completedness by PATCHing to the todo's url", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         return createFreshTodoAndGetItsUrl()
           .then( function(urlForNewTodo){
             return patchJson( urlForNewTodo, {completed:true} );
@@ -168,7 +168,7 @@ function defineSpecsFor(apiRoot){
       });
 
       it("changes to a todo are persisted and show up when re-fetching the todo", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var patchedTodo = createFreshTodoAndGetItsUrl()
           .then( function(urlForNewTodo){
             return patchJson( urlForNewTodo, {title:"changed title", completed:true} );
@@ -199,7 +199,7 @@ function defineSpecsFor(apiRoot){
       });
 
       it("can delete a todo making a DELETE request to the todo's url", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var todosAfterCreatingAndDeletingTodo = createFreshTodoAndGetItsUrl()
           .then( function(urlForNewTodo){
             return delete_(urlForNewTodo);
@@ -211,13 +211,13 @@ function defineSpecsFor(apiRoot){
 
     describe("tracking todo order", function(){
       it("can create a todo with an order field", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var postResult = postRoot({title:"blah",order:523});
         return expect(postResult).to.eventually.have.property("order",523);
       });
 
       it("can PATCH a todo to change its order", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var patchedTodo = createFreshTodoAndGetItsUrl( {order: 10} )
           .then( function(newTodoUrl){
             return patchJson(newTodoUrl,{order:95});
@@ -227,7 +227,7 @@ function defineSpecsFor(apiRoot){
       });
 
       it("remembers changes to a todo's order", function(){
-        fullTitle = this.fullTitle();
+        fullTitle = this.test.fullTitle();
         var refetchedTodo = createFreshTodoAndGetItsUrl( {order: 10} )
           .then( function(newTodoUrl){
             return patchJson(newTodoUrl,{order:95});
