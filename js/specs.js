@@ -260,6 +260,9 @@ function defineSpecsFor(apiRoot){
     var ajaxOptions = _.defaults( (options||{}), {
       type: httpMethod,
       url: url,
+      headers: {
+        testTitle: this.testTitle()
+      },
       contentType: "application/json",
       dataType: "text", // so we can explicitly parse JSON and fail with more detail than jQuery usually would give us
       timeout: 30000 // so that we don't fail while waiting on a heroku dyno to spin up
