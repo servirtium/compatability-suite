@@ -4,4 +4,4 @@ Some todobackends may fail with this extra header. The Sinatra one does not obje
 
 Servirtium records all headers, so this amounts to telemetry for the compatibility suite.
 
-Wheareas Pete Hodgson's specs normally run from https://www.todobackend.com/specs, this fork is hosted here (less pretty URL; GitHub Pages): https://servirtium.github.io/todo-backend-js-spec
+Wheareas Pete Hodgson's specs normally run from https://www.todobackend.com/specs, this fork is hosted here (less pretty URL; GitHub Pages): https://servirtium.github.io/compatability-suite
