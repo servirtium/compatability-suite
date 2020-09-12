@@ -279,9 +279,9 @@ function defineSpecsFor(apiRoot){
 
     if (url.startsWith("https://localhost:61417")) {
       throw new Error("All communication for the Servirtium compatability test suite should go through Servrtium\n" +
-          "on http://localhost:61417, yet something in the headers or body of a prior request is " +
-          "implicating https://localhost:61417 as the server, yet it is not up on https it is listening " +
-          "on plain http - the **mutation** of a prior response to the localhost form of the URL isn't " +
+          "on http://localhost:61417, yet something in the headers or body of a prior request is\n " +
+          "implicating https://localhost:61417 as the server, yet it is not up on https it is listening\n " +
+          "on plain http - the **mutation** of a prior response to the localhost form of the URL isn't\n " +
           "correct.");
     }
 
