@@ -277,13 +277,20 @@ function defineSpecsFor(apiRoot){
 
   function ajax(httpMethod, url, options){
 
+    if (url.startsWith("https://localhost:61417")) {
+      throw new Error("All communication for the Servirtium compatability test suite should go through Servrtium\n" +
+          "on http://localhost:61417, yet something in the headers or body of a prior request is " +
+          "implicating https://localhost:61417 as the server, yet it is not up on https it is listening " +
+          "on plain http - the **mutation** of a prior response to the localhost form of the URL isn't " +
+          "correct.");
+    }
+
     if (! url.startsWith("http://localhost:61417")) {
       const domain = url.substring(0, url.lastIndexOf("/todo"));
       throw new Error("All communication for the Servirtium compatability test suite should go through Servrtium\n" +
           "on http://localhost:61417, yet something in the headers or body of a prior response was accessing\n" + domain + " incorrectly. To fix this:\n" +
-          domain + " should have been mutated into http://localhost:61417 and \n" +
+          domain + " should have been **mutated** into http://localhost:61417 and \n" +
           domain.substring(domain.indexOf("//")+2) + " should have been mutated into localhost:61417 in prior response headers and bodies,");
-          // "of a prior response was accessing " + url);
     }
 
     var ajaxOptions = _.defaults( (options||{}), {
