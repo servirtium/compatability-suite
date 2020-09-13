@@ -175,7 +175,7 @@ function defineSpecsFor(apiRoot){
           });
 
         function verifyTodosProperties(todo){
-          expect(todo).to.have.property("completed",true);
+          expect(todo).to.have.property("completed",true, "was: "+ JSON.stringify(todo));
           expect(todo).to.have.property("title","changed title");
         }
 
