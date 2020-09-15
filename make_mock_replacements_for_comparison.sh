@@ -16,4 +16,15 @@ echo " cat > .todobackend_test_suite_normalized.md" >> .compatibility_suite_mock
 
 bash .compatibility_suite_mock_replacements.sh
 
-echo "See .todobackend_test_suite_normalized.md"
+# echo "See .todobackend_test_suite_normalized.md"
+
+diffs=$(diff .todobackend_test_suite_normalized.md todobackend_test_suite_reference.md)
+
+# echo $foo
+
+if [ -z "$diffs" ]
+then
+      echo "Servirtium reference recording (GUIDS and dates normalized) matches the contents of $1"
+else
+      echo "Servirtium reference recording (todobackend_test_suite_reference.md; GUIDS and dates normalized) DOES NOT match the contents of $1, see also .todobackend_test_suite_normalized.md"
+fi
