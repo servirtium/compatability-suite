@@ -3,33 +3,33 @@ function defineSpecsFor(apiRoot){
 
   var fullTitle = "";
 
-  function get(url, options){
-    return getRaw(url,options).then( transformResponseToJson );
+  function get(url) {
+    return getRaw(url).then( transformResponseToJson );
   }
 
-  function getRaw(url, options){
-    return ajax("GET", url, options);
+  function getRaw(url) {
+    return ajax("GET", url, {}, 200);
   }
-  function post(url, data, options){
+  function post(url, data, options) {
     options = options || {};
     options.data = JSON.stringify(data);
-    return ajax("POST", url, options);
+    return ajax("POST", url, options, 201);
   }
-  function postJson(url, data, options){
-    return post(url,data,options).then( transformResponseToJson );
+  function postJson(url, data, options) {
+    return post(url, data, options).then( transformResponseToJson );
   }
 
-  function patch(url, data, options){
+  function patch(url, data, options) {
     options = options || {};
     options.data = JSON.stringify(data);
-    return ajax("PATCH", url, options);
+    return ajax("PATCH", url, options, 200);
   }
-  function patchJson(url, data, options){
-    return patch(url,data,options).then( transformResponseToJson );
+  function patchJson(url, data, options) {
+    return patch(url, data, options).then( transformResponseToJson );
   }
 
-  function delete_(url, options){
-    return ajax("DELETE", url, options);
+  function delete_(url) {
+    return ajax("DELETE", url, {}, 204);
   }
 
   function postRoot(data){
@@ -47,7 +47,7 @@ function defineSpecsFor(apiRoot){
       var postParams = _.defaults( (params||{}), {
         title: "blah"
       });
-      return postRoot(postParams)
+      return postRoot(postParams, {}, 200)
         .then( urlFromTodo );
     };
 
@@ -85,7 +85,7 @@ function defineSpecsFor(apiRoot){
 
       it("adds a new todo to the list of todos at the root url", function(){
         fullTitle = this.test.fullTitle();
-        var getAfterPost = postRoot({title:"walk the dog"}).then(getRoot);
+        var getAfterPost = postRoot({title:"walk the dog"}, {}, 201).then(getRoot);
         return getAfterPost.then(function(todosFromGet){
           expect(todosFromGet).to.have.length(1);
           expect(todosFromGet[0]).to.have.property("title","walk the dog");
@@ -275,10 +275,10 @@ function defineSpecsFor(apiRoot){
     }
   }
 
-  function ajax(httpMethod, url, options){
+  function ajax(httpMethod, url, options, expectedSC) {
 
     if (url.startsWith("https://localhost:61417")) {
-      throw new Error("All communication for the Servirtium compatability test suite should go through Servrtium\n" +
+      throw new Error("All communication for the Servirtium compatibility test suite should go through Servrtium\n" +
           "on http://localhost:61417, yet something in the headers or body of a prior request is\n " +
           "implicating https://localhost:61417 as the server, yet it is not up on https it is listening\n " +
           "on plain http - the **mutation** of a prior response to the localhost form of the URL isn't\n " +
@@ -308,6 +308,9 @@ function defineSpecsFor(apiRoot){
 
     return Q.promise( function(resolve, reject){
       xhr.success( function(){
+        if(xhr.status !== expectedSC) {
+          throw new Error("HTTP status code should have been " + expectedSC + " but was " + xhr.status);
+        }
         return resolve(xhr);
       });
       xhr.fail( function(){
