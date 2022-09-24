@@ -286,11 +286,11 @@ function defineSpecsFor(apiRoot){
     }
 
     if (! url.startsWith("http://localhost:61417")) {
-      const domain = url.substring(0, url.lastIndexOf("/todo"));
+      const domain = url.substring(0, url.indexOf("/", 10));
       throw new Error("All communication for the Servirtium compatability test suite should go through Servirtium\n" +
           "on http://localhost:61417, yet something in the headers or body of a prior response was accessing\n`" + domain + "` incorrectly. To fix this:\n`" +
           domain + "` should have been **mutated** into http://localhost:61417 and \n`" +
-          url + "` should have been mutated into localhost:61417 (prefix) in response headers and bodies,");
+          domain.replace("http://","") + "` should have been mutated into localhost:61417 in response headers and bodies as it passed through Servirtium from the original docker container");
     }
 
     var ajaxOptions = _.defaults( (options||{}), {
