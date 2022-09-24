@@ -1,3 +1,6 @@
+const params = new Proxy(new URLSearchParams(window.location.search), {
+  get: (searchParams, prop) => searchParams.get(prop),
+});
 
 function defineSpecsFor(apiRoot){
 
@@ -277,7 +280,7 @@ function defineSpecsFor(apiRoot){
 
   function ajax(httpMethod, url, options, expectedSC) {
 
-    if (url.startsWith("https://localhost:61417")) {
+    if (params.noServirtium === undefined && url.startsWith("https://localhost:61417")) {
       throw new Error("All communication for the Servirtium compatibility test suite should go through Servirtium\n" +
           "on http://localhost:61417, yet something in the headers or body of a prior request is\n " +
           "implicating https://localhost:61417 as the URL of the server, yet it is not up on https it is listening\n " +
@@ -285,7 +288,7 @@ function defineSpecsFor(apiRoot){
           "correct.");
     }
 
-    if (! url.startsWith("http://localhost:61417")) {
+    if (params.noServirtium === undefined && ! url.startsWith("http://localhost:61417")) {
       const domain = url.substring(0, url.indexOf("/", 10));
       throw new Error("All communication for the Servirtium compatability test suite should go through Servirtium\n" +
           "on http://localhost:61417, yet something in the headers or body of a prior response was accessing\n`" + domain + "` incorrectly. To fix this:\n`" +
