@@ -18,13 +18,14 @@ $('#target-chooser input').on('keyup',function(){
 });
 
 
-targetRootUrl = window.location.search.substr(1);
+targetRootUrl = window.location.search.substr(1).split("&")[0];
+servirtiumMode = window.location.search.indexOf("&noServirtium") === -1;
 
 if( targetRootUrl ){
   $("#target-info .target-url").text(targetRootUrl);
   $("#target-chooser").hide();
 
-  defineSpecsFor(targetRootUrl);
+  defineSpecsFor(targetRootUrl, servirtiumMode);
 
   mocha.checkLeaks();
   var runner = mocha.run();
