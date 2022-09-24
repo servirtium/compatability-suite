@@ -290,7 +290,7 @@ function defineSpecsFor(apiRoot){
       throw new Error("All communication for the Servirtium compatability test suite should go through Servirtium\n" +
           "on http://localhost:61417, yet something in the headers or body of a prior response was accessing\n`" + domain + "` incorrectly. To fix this:\n`" +
           domain + "` should have been **mutated** into http://localhost:61417 and \n`" +
-          domain.replace("http://","") + "` should have been mutated into localhost:61417 in response headers and bodies as it passed through Servirtium from the original docker container");
+          domain.replace("http://","") + "` should have been mutated into localhost:61417.\n Both in response headers and bodies as payloads passed through Servirtium from the original docker container.");
     }
 
     var ajaxOptions = _.defaults( (options||{}), {
