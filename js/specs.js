@@ -7,12 +7,12 @@ function defineSpecsFor(apiRoot, servirtiumMode){
   }
 
   function getRaw(url) {
-    return ajax("GET", url, {}, 200);
+    return ajax("GET", url, {});
   }
   function post(url, data, options) {
     options = options || {};
     options.data = JSON.stringify(data);
-    return ajax("POST", url, options, 201);
+    return ajax("POST", url, options);
   }
   function postJson(url, data, options) {
     return post(url, data, options).then( transformResponseToJson );
@@ -21,14 +21,14 @@ function defineSpecsFor(apiRoot, servirtiumMode){
   function patch(url, data, options) {
     options = options || {};
     options.data = JSON.stringify(data);
-    return ajax("PATCH", url, options, 200);
+    return ajax("PATCH", url, options);
   }
   function patchJson(url, data, options) {
     return patch(url, data, options).then( transformResponseToJson );
   }
 
   function delete_(url) {
-    return ajax("DELETE", url, {}, 204);
+    return ajax("DELETE", url, {});
   }
 
   function postRoot(data){
@@ -274,7 +274,7 @@ function defineSpecsFor(apiRoot, servirtiumMode){
     }
   }
 
-  function ajax(httpMethod, url, options, expectedSC) {
+  function ajax(httpMethod, url, options) {
 
     if (servirtiumMode && url.startsWith("https://localhost:61417")) {
       throw new Error("All communication for the Servirtium compatibility test suite should go through Servirtium\n" +
@@ -307,9 +307,6 @@ function defineSpecsFor(apiRoot, servirtiumMode){
 
     return Q.promise( function(resolve, reject){
       xhr.success( function(){
-        if(xhr.status !== expectedSC) {
-          throw new Error("HTTP status code should have been " + expectedSC + " but was " + xhr.status);
-        }
         return resolve(xhr);
       });
       xhr.fail( function(){
