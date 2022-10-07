@@ -253,7 +253,7 @@ function defineSpecsFor(apiRoot, servirtiumMode){
   function interpretXhrFail(httpMethod,url,xhr){
     var failureHeader = "\n\n"+httpMethod+" "+url+"\nFAILED\n\n";
     if( xhr.status == 0 ){
-       expect.fail(
+       chai.expect.fail(
         failureHeader
         + "The browser failed entirely when make an AJAX request.\n"
         + "Either there is a network issue in reaching the url, or the\n"
@@ -266,7 +266,7 @@ function defineSpecsFor(apiRoot, servirtiumMode){
         + "\n"
       );
     }else{
-       expect.fail(
+       chai.expect.fail(
         failureHeader
         + xhr.status + ": " + xhr.statusText + " (" + xhr.responseText.replace(/\n*$/, "") + ")"
         + "\n\n"
