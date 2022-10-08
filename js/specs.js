@@ -268,7 +268,7 @@ function defineSpecsFor(apiRoot, servirtiumMode){
     }else{
        return Error(
         failureHeader
-        + xhr.status + ": " + xhr.statusText + " (" + xhr.responsereturn Errorext.replace(/\n*$/, "") + ")"
+        + xhr.status + ": " + xhr.statusText + " (" + xhr.responseText.replace(/\n*$/, "") + ")"
         + "\n\n"
       );
     }
